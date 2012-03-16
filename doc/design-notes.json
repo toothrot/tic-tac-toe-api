@@ -1,0 +1,85 @@
+// GET /games/:id
+{
+  "game": {
+    "id": 1234,
+    "status":"ended",
+    "winner": "bob",
+    "players": [
+      {
+        "id": "bob"
+      },
+      {
+        "id": "alice"
+      }
+    ],
+    "board": [["bob",null,"alice"],[null,"bob","alice"],[null,null,"bob"]]
+  }
+}
+
+// POST /games
+// Create a new game
+// Request:
+{
+  "players": [
+    {
+      "id": "bob"
+    },
+    {
+      "id": "alice"
+    }
+  ]
+}
+// Success Response:
+200 OK
+// Error Response:
+400 Bad Request
+{
+  "error": {
+    "message": "Only one player was provided. Please specify two players."
+  }
+}
+
+// GET /games/:id/actions
+// List a game's actions
+// Success Response:
+200 OK
+{
+  "actions": [
+    {
+      "player": "bob"
+      "square": [2,2]
+    }
+    {
+      "player": "alice"
+      "square": [1,1]
+    }
+  ]
+}
+// Error Response:
+400 Bad Request
+{
+  "error": {
+    "message": "Game 1234 doesn't exist!"
+  }
+}
+
+// POST /games/:id/actions
+// Create a new move
+// Request:
+{
+  "action": {
+    "player": "bob",
+    "square": [2,2]
+  }
+}
+// Success Response:
+200 OK
+// Error Response:
+400 Bad Request
+{
+  "error": {
+    "message": "Bad square"
+  }
+}
+
+
