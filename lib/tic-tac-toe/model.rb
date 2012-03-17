@@ -9,7 +9,7 @@ module TicTacToe
     end
 
     def self.redis
-      uri = URI.parse(ENV["REDISTOGO_URL"])
+      uri = URI.parse(ENV["REDISTOGO_URL"]) if ENV["REDISTOGO_URL"]
       if uri
         @redis ||= Redis.new(:host => uri.host, :port => uri.port, :password => uri.password)
       else

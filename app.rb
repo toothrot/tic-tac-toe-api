@@ -9,10 +9,6 @@ module TicTacToe
     disable :show_exceptions
     set :dump_errors, true
 
-    before do
-      type "application/json"
-    end
-
     get "/" do
       "Howdy"
     end
@@ -64,6 +60,7 @@ module TicTacToe
         else
           data.to_hash
         end
+      content_type "application/json"
       Yajl::Encoder.encode(output_hash)
     end
   end
