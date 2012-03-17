@@ -82,6 +82,9 @@ class TicTacToeTest < Test::Unit::TestCase
     action_params = {'player' => 'sally', 'position' => 0}
     post "/v1/games/#{id}/actions", Yajl.dump(action_params)
     assert last_response.bad_request?
+    error = Yajl.load(last_response.body)['error']
+    assert_equal "Bad request", error["message"]
+    assert_equal 400, error["code"]
   end
 
   def test_moving_with_a_bad_player
@@ -93,6 +96,9 @@ class TicTacToeTest < Test::Unit::TestCase
     action_params = {'player' => 'frank', 'position' => 0}
     post "/v1/games/#{id}/actions", Yajl.dump(action_params)
     assert last_response.bad_request?
+    error = Yajl.load(last_response.body)['error']
+    assert_equal "Bad request", error["message"]
+    assert_equal 400, error["code"]
   end
 
   def test_moving_out_of_order
@@ -104,6 +110,9 @@ class TicTacToeTest < Test::Unit::TestCase
     action_params = {'player' => 'sally', 'position' => 0}
     post "/v1/games/#{id}/actions", Yajl.dump(action_params)
     assert last_response.bad_request?
+    error = Yajl.load(last_response.body)['error']
+    assert_equal "Bad request", error["message"]
+    assert_equal 400, error["code"]
   end
 
   def test_winning

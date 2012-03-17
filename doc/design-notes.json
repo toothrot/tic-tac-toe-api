@@ -12,7 +12,7 @@
         "id": "alice"
       }
     ],
-    "board": [["bob",null,"alice"],[null,"bob","alice"],[null,null,"bob"]]
+    "board": ["bob",null,"alice",null,"bob","alice",null,null,"bob"]
   }
 }
 

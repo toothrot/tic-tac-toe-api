@@ -14,7 +14,7 @@ module TicTacToe
     end
 
     get "/v1/games" do
-      data = {:games => Game.find_all}
+      data = {:games => Game.find_all(params)}
       render_api_response(data)
     end
 
@@ -40,12 +40,22 @@ module TicTacToe
         data = {:action => action}
         render_api_response(data)
       else
-        status 400
+        render_api_error(400, "Bad request")
       end
     end
 
     error do
-      env['sinatra.error'].inspect
+      render_api_error(500, env['sinatra.error'].inspect)
+    end
+
+    def render_api_error(code = 400, message = nil)
+      status code
+      render_api_response({
+          :error => {
+            :message => message || "An error has occurred",
+            :code => code
+          }
+        })
     end
 
     def json_params
