@@ -1,0 +1,6 @@
+require 'active_model'
+require 'yajl'
+require 'redis'
+require 'uuid'
+require 'tic-tac-toe/model'
+require 'tic-tac-toe/game'
