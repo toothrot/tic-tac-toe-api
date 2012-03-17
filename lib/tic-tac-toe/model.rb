@@ -33,8 +33,9 @@ module TicTacToe
 
     def self.find_all(options = {})
       limit = options[:limit] || 10
-      ids = redis.zrevrangebyscore("#{redis_namespace}_ids", Time.now.utc.to_i, 0, :limit => [0,limit])
-      ids.map { |id| find(id) }
+      offset = options[:offset] || 0
+      ids = redis.zrevrangebyscore("#{redis_namespace}_ids", Time.now.utc.to_i, 0, :limit => [offset,limit])
+      ids.map {|id| find(id) }
     end
 
     def redis
@@ -42,7 +43,11 @@ module TicTacToe
     end
 
     def save
-      redis.set("#{self.class.redis_namespace}:#{attributes[:id]}", to_json)
+      hash_to_save = self.class.persisted_attributes.inject({}) do |hash,key|
+        hash[key.to_s] = attributes[key.to_s]
+        hash
+      end
+      redis.set("#{self.class.redis_namespace}:#{attributes["id"]}", Yajl::Encoder.encode(hash_to_save))
     end
  
     def to_model

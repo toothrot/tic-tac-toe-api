@@ -28,10 +28,20 @@ module TicTacToe
       render_api_response(data)
     end
 
-    get "/v1/games/:id/actions" do
+    get "/v1/games/:game_id/actions" do
+      data = {:actions => Action.find_all_by_game_id(params[:game_id])}
+      render_api_response(data)
     end
 
-    post "/v1/games/:id/actions" do
+    post "/v1/games/:game_id/actions" do
+      create_params = json_params.merge("game_id" => params[:game_id])
+      action = Action.create(create_params)
+      if action
+        data = {:action => action}
+        render_api_response(data)
+      else
+        status 400
+      end
     end
 
     error do
