@@ -26,9 +26,15 @@ module TicTacToe
     end
 
     def self.find(id)
-      Yajl::Parser.parse(redis.get("#{redis_namespace}:#{id}"))
+      new(Yajl::Parser.parse(redis.get("#{redis_namespace}:#{id}")))
       rescue Yajl::ParseError
         nil
+    end
+
+    def self.find_all(options = {})
+      limit = options[:limit] || 10
+      ids = redis.zrevrangebyscore("#{redis_namespace}_ids", Time.now.utc.to_i, 0, :limit => [0,limit])
+      ids.map { |id| find(id) }
     end
 
     def redis

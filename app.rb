@@ -14,14 +14,18 @@ module TicTacToe
     end
 
     get "/v1/games" do
+      data = {:games => Game.find_all}
+      render_api_response(data)
     end
 
     get "/v1/games/:id" do
+      data = {:game => Game.find(params[:id])}
+      render_api_response(data)
     end
 
     post "/v1/games" do
-      game = Game.create(json_params)
-      render_api_response(game)
+      data = {:game => Game.create(json_params)}
+      render_api_response(data)
     end
 
     get "/v1/games/:id/actions" do
@@ -40,7 +44,7 @@ module TicTacToe
 
     def render_api_response(data)
       output_hash = 
-        case data.class
+        case data
         when Array
           data.map(&:to_hash)
         else
