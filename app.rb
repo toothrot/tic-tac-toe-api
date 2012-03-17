@@ -9,6 +9,10 @@ module TicTacToe
     disable :show_exceptions
     set :dump_errors, true
 
+    before do
+      type "application/json"
+    end
+
     get "/" do
       "Howdy"
     end
