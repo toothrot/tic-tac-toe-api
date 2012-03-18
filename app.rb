@@ -10,7 +10,7 @@ module TicTacToe
     set :dump_errors, true
 
     get "/" do
-      "Howdy"
+      markdown(:README)
     end
 
     get "/v1/games" do

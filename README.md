@@ -10,33 +10,33 @@ First, to create a new game, complete the following request:
 In the response, you receive an "id" for your game of tic-tac-toe. This ID should be used in all future moves against this instance of the game.
 
 ```javascript
-{
-  "game": {
-    "status": "in_progress",
-    "id": "aab1de70-52bd-012f-6231-12313d054231",
-    "created_at": 1332029847,
-    "players": [
-      {
-        "id": "alex"
-      },
-      {
-        "id": "evan"
+    {
+      "game": {
+        "status": "in_progress",
+        "id": "aab1de70-52bd-012f-6231-12313d054231",
+        "created_at": 1332029847,
+        "players": [
+          {
+            "id": "alex"
+          },
+          {
+            "id": "evan"
+          }
+        ],
+        "board": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "winner": null
       }
-    ],
-    "board": [
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null
-    ],
-    "winner": null
-  }
-}
+    }
 ```
 
 ## Seeing a list of games
@@ -49,35 +49,35 @@ In the response, you receive an "id" for your game of tic-tac-toe. This ID shoul
 ### Example response
 
 ```javascript
-{
-  "games": [
     {
-      "id": "aab1de70-52bd-012f-6231-12313d054231",
-      "status": "in_progress",
-      "players": [
+      "games": [
         {
-          "id": "alex"
-        },
-        {
-          "id": "evan"
+          "id": "aab1de70-52bd-012f-6231-12313d054231",
+          "status": "in_progress",
+          "players": [
+            {
+              "id": "alex"
+            },
+            {
+              "id": "evan"
+            }
+          ],
+          "created_at": 1332029847,
+          "board": [
+            "alex",
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          "winner": null
         }
-      ],
-      "created_at": 1332029847,
-      "board": [
-        "alex",
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null
-      ],
-      "winner": null
+      ]
     }
-  ]
-}
 ```
 
 ## Seeing an individual game 
@@ -87,35 +87,35 @@ In the response, you receive an "id" for your game of tic-tac-toe. This ID shoul
 ### Example response
 
 ```javascript
-{
-  "games": [
     {
-      "id": "aab1de70-52bd-012f-6231-12313d054231",
-      "status": "in_progress",
-      "players": [
+      "games": [
         {
-          "id": "alex"
-        },
-        {
-          "id": "evan"
+          "id": "aab1de70-52bd-012f-6231-12313d054231",
+          "status": "in_progress",
+          "players": [
+            {
+              "id": "alex"
+            },
+            {
+              "id": "evan"
+            }
+          ],
+          "created_at": 1332029847,
+          "board": [
+            "alex",
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          "winner": null
         }
-      ],
-      "created_at": 1332029847,
-      "board": [
-        "alex",
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null
-      ],
-      "winner": null
+      ]
     }
-  ]
-}
 ```
 
 ## Making a Move
@@ -126,15 +126,15 @@ In the response, you receive an "id" for your game of tic-tac-toe. This ID shoul
 In the response, you'll get back an "action object" if it was a success.
 
 ```javascript
-{
-  "action": {
-    "player": "alex",
-    "game_id": "aab1de70-52bd-012f-6231-12313d054231",
-    "position": 0,
-    "id": "e7c11270-52bd-012f-6231-12313d054231",
-    "created_at": 1332029949
-  }
-}
+    {
+      "action": {
+        "player": "alex",
+        "game_id": "aab1de70-52bd-012f-6231-12313d054231",
+        "position": 0,
+        "id": "e7c11270-52bd-012f-6231-12313d054231",
+        "created_at": 1332029949
+      }
+    }
 ```
 
 ## Seeing all moves for a game
@@ -144,17 +144,17 @@ In the response, you'll get back an "action object" if it was a success.
 In the response, you'll get back a list of "action objects"
 
 ```javascript
-{
-  "actions": [
     {
-      "player": "alex",
-      "game_id": "aab1de70-52bd-012f-6231-12313d054231",
-      "position": 0,
-      "id": "e7c11270-52bd-012f-6231-12313d054231",
-      "created_at": 1332029949
+      "actions": [
+        {
+          "player": "alex",
+          "game_id": "aab1de70-52bd-012f-6231-12313d054231",
+          "position": 0,
+          "id": "e7c11270-52bd-012f-6231-12313d054231",
+          "created_at": 1332029949
+        }
+      ]
     }
-  ]
-}
 ```
 
 ## Error messaging
@@ -170,12 +170,12 @@ If we make a duplicate move, or another kind of bad request, we will receive an 
 The error messages are formatted consistently through all APIs:
 
 ```javascript
-{
-  "error": {
-    "message": "Duplicate Move and It's not your turn",
-    "code": 400
-  }
-}
+    {
+      "error": {
+        "message": "Duplicate Move and It's not your turn",
+        "code": 400
+      }
+    }
 ```
 
 ## Running Locally
