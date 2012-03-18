@@ -184,3 +184,9 @@ Simply run the following commands to start a server locally:
 
     bundle install
     thin start
+
+## Running tests
+
+To run tests, run the following command:
+
+    rake test
