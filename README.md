@@ -41,7 +41,7 @@ In the response, you receive an "id" for your game of tic-tac-toe. This ID shoul
 
 ## Seeing a list of games
 
-    POST http://quiet-sword-2122.heroku.com/v1/games
+    GET http://quiet-sword-2122.heroku.com/v1/games
 
 ### Optional Parameters
 * limit - limits the list of games returned
@@ -82,7 +82,7 @@ In the response, you receive an "id" for your game of tic-tac-toe. This ID shoul
 
 ## Seeing an individual game 
 
-    POST http://quiet-sword-2122.heroku.com/v1/games/aab1de70-52bd-012f-6231-12313d054231
+    GET http://quiet-sword-2122.heroku.com/v1/games/aab1de70-52bd-012f-6231-12313d054231
 
 ### Example response
 
