@@ -25,6 +25,15 @@ class TicTacToeTest < Test::Unit::TestCase
     assert_equal game_params['players'], data["game"]["players"]
   end
 
+  def test_creating_a_game_with_bad_parameters
+    game_params = {'players' => [{'id' => "bob"}, {'id' => "bob"}]}
+    post '/v1/games', Yajl.dump(game_params)
+    assert last_response.bad_request?
+    error = Yajl.load(last_response.body)['error']
+    assert_equal "Invalid Players", error["message"]
+    assert_equal 400, error["code"]
+  end
+
   def test_listing_games
     game_params = {'players' => [{'id' => "mike"}, {'id' => "sally"}]}
     post '/v1/games', Yajl.dump(game_params)
@@ -83,7 +92,7 @@ class TicTacToeTest < Test::Unit::TestCase
     post "/v1/games/#{id}/actions", Yajl.dump(action_params)
     assert last_response.bad_request?
     error = Yajl.load(last_response.body)['error']
-    assert_equal "Bad request", error["message"]
+    assert_equal "Duplicate Move", error["message"]
     assert_equal 400, error["code"]
   end
 
@@ -97,7 +106,7 @@ class TicTacToeTest < Test::Unit::TestCase
     post "/v1/games/#{id}/actions", Yajl.dump(action_params)
     assert last_response.bad_request?
     error = Yajl.load(last_response.body)['error']
-    assert_equal "Bad request", error["message"]
+    assert_equal "Bad player name and It's not your turn", error["message"]
     assert_equal 400, error["code"]
   end
 
@@ -111,7 +120,7 @@ class TicTacToeTest < Test::Unit::TestCase
     post "/v1/games/#{id}/actions", Yajl.dump(action_params)
     assert last_response.bad_request?
     error = Yajl.load(last_response.body)['error']
-    assert_equal "Bad request", error["message"]
+    assert_equal "It's not your turn", error["message"]
     assert_equal 400, error["code"]
   end
 

@@ -24,8 +24,13 @@ module TicTacToe
     end
 
     post "/v1/games" do
-      data = {:game => Game.create(json_params)}
-      render_api_response(data)
+      game = Game.create(json_params)
+      if game.errors.empty?
+        data = {:game => game}
+        render_api_response(data)
+      else
+        render_api_error(400, game.errors.full_messages.to_sentence)
+      end
     end
 
     get "/v1/games/:game_id/actions" do
@@ -36,11 +41,11 @@ module TicTacToe
     post "/v1/games/:game_id/actions" do
       create_params = json_params.merge("game_id" => params[:game_id])
       action = Action.create(create_params)
-      if action
+      if action.errors.empty?
         data = {:action => action}
         render_api_response(data)
       else
-        render_api_error(400, "Bad request")
+        render_api_error(400, action.errors.full_messages.to_sentence)
       end
     end
 

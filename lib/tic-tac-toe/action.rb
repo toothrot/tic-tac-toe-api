@@ -1,6 +1,7 @@
 module TicTacToe
   class Action < Model
     persist :player,:game_id,:created_at,:position
+    validate :is_valid_move_on_create?
 
     def self.find_all_by_game_id(game_id)
       ids = redis.lrange("#{Game.redis_namespace}:#{game_id}:actions", 0, -1)
@@ -13,14 +14,12 @@ module TicTacToe
                       "position" => attributes["position"],
                       "id" => ::UUID.generate,
                       "created_at" => Time.now.utc.to_i)
-      if action.is_valid_move_on_create?
+      if action.valid?
         action.save
         redis.rpush("#{Game.redis_namespace}:#{action.attributes["game_id"]}:actions", action.attributes["id"])
         redis.zadd("#{redis_namespace}_ids", action.attributes["created_at"], action.attributes["id"])
-        action
-      else
-        false
       end
+      action
     end
 
     def game
@@ -35,6 +34,8 @@ module TicTacToe
       attributes["player"].to_s
     end
 
+    private
+
     def player_order
       game.players.index do |gp|
         gp["id"] == player
@@ -42,9 +43,10 @@ module TicTacToe
     end
 
     def is_valid_move_on_create?
-      return false if game.status != "in_progress"
-      return false if game.actions.any? {|a| a.position == attributes["position"] }
-      return false if game.actions.size % 2 != player_order
+      errors.add(:base, "Game over") if game.status != "in_progress"
+      errors.add(:base, "Duplicate Move") if game.actions.any? {|a| a.position == attributes["position"] }
+      errors.add(:base, "Bad player name") if game.players.none? { |gp| gp["id"] == player }
+      errors.add(:base, "It's not your turn") if game.actions.size % 2 != player_order
       true
     end
   end
