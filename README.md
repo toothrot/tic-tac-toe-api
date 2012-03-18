@@ -177,3 +177,10 @@ The error messages are formatted consistently through all APIs:
   }
 }
 ```
+
+## Running Locally
+
+Simply run the following commands to start a server locally:
+
+    bundle install
+    thin start
