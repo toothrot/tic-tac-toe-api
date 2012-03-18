@@ -58,6 +58,19 @@ class TicTacToeTest < Test::Unit::TestCase
     assert_equal 'fred', data['game']['players'].first['id']
   end
 
+  def test_showing_a_non_existent_game
+    game_params = {'players' => [{'id' => "fred"}, {'id' => "sally"}]}
+    post '/v1/games', Yajl.dump(game_params)
+    assert last_response.ok?
+    id = Yajl.load(last_response.body)["game"]["id"]
+
+    get "/v1/games/barf"
+    assert last_response.not_found?
+    error = Yajl.load(last_response.body)['error']
+    assert_equal "Could not find the game id \"barf\"", error["message"]
+    assert_equal 404, error["code"]
+  end
+
   def test_making_a_move
     game_params = {'players' => [{'id' => "bob"}, {'id' => "sally"}]}
     post '/v1/games', Yajl.dump(game_params)

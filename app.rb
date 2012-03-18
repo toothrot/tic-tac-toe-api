@@ -19,8 +19,12 @@ module TicTacToe
     end
 
     get "/v1/games/:id" do
-      data = {:game => Game.find(params[:id])}
-      render_api_response(data)
+      game = Game.find(params[:id])
+      if game
+        render_api_response({:game => game})
+      else
+        render_api_error(404, "Could not find the game id \"#{params[:id]}\"")
+      end
     end
 
     post "/v1/games" do
