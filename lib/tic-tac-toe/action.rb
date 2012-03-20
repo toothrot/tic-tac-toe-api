@@ -2,6 +2,7 @@ module TicTacToe
   class Action < Model
     persist :player,:game_id,:created_at,:position
     validate :is_valid_move_on_create?
+    validates_numericality_of 'position', :greater_than_or_equal_to => 0, :less_than_or_equal_to => 8, :only_integer => true
 
     def self.find_all_by_game_id(game_id)
       ids = redis.lrange("#{Game.redis_namespace}:#{game_id}:actions", 0, -1)
@@ -11,7 +12,7 @@ module TicTacToe
     def self.create(attributes)
       action = self.new("player" => attributes["player"],
                       "game_id" => attributes["game_id"],
-                      "position" => attributes["position"],
+                      "position" => attributes["position"].to_i,
                       "id" => ::UUID.generate,
                       "created_at" => Time.now.utc.to_i)
       if action.valid?

@@ -11,10 +11,9 @@ class TicTacToeTest < Test::Unit::TestCase
     ::TicTacToe::App
   end
 
-  def test_it_says_hello_world
+  def test_documentation_response_successful
     get '/'
     assert last_response.ok?
-    assert_equal 'Howdy', last_response.body
   end
 
   def test_creating_a_game
@@ -197,6 +196,32 @@ class TicTacToeTest < Test::Unit::TestCase
     get "/v1/games/#{id}"
     assert last_response.ok?
     assert_equal ["sally", "sally", "sally", "bob", "bob", nil, nil, nil, nil],
+      Yajl.load(last_response.body)["game"]["board"]
+  end
+
+  def test_invalid_action_positions
+    game_params = {'players' => [{'id' => "sally"}, {'id' => "bob"}]}
+    post '/v1/games', Yajl.dump(game_params)
+    assert last_response.ok?
+    id = Yajl.load(last_response.body)["game"]["id"]
+
+    action_params = {'player' => 'sally', 'position' => -1}
+    post "/v1/games/#{id}/actions", Yajl.dump(action_params)
+    assert last_response.bad_request?
+    error = Yajl.load(last_response.body)['error']
+    assert_equal "Position must be greater than or equal to 0", error["message"]
+    assert_equal 400, error["code"]
+
+    action_params = {'player' => 'sally', 'position' => 10}
+    post "/v1/games/#{id}/actions", Yajl.dump(action_params)
+    assert last_response.bad_request?
+    error = Yajl.load(last_response.body)['error']
+    assert_equal "Position must be less than or equal to 8", error["message"]
+    assert_equal 400, error["code"]
+
+    get "/v1/games/#{id}"
+    assert last_response.ok?
+    assert_equal [nil, nil, nil, nil, nil, nil, nil, nil, nil],
       Yajl.load(last_response.body)["game"]["board"]
   end
 end
