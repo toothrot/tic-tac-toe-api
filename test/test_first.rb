@@ -219,6 +219,21 @@ class TicTacToeTest < Test::Unit::TestCase
     assert_equal "Position must be less than or equal to 8", error["message"]
     assert_equal 400, error["code"]
 
+    action_params = {'player' => 'sally', 'position' => nil}
+    post "/v1/games/#{id}/actions", Yajl.dump(action_params)
+    puts last_response.body
+    assert last_response.bad_request?
+    error = Yajl.load(last_response.body)['error']
+    assert_equal "Position is not a number", error["message"]
+    assert_equal 400, error["code"]
+
+    action_params = {'player' => 'sally'}
+    post "/v1/games/#{id}/actions", Yajl.dump(action_params)
+    assert last_response.bad_request?
+    error = Yajl.load(last_response.body)['error']
+    assert_equal "Position is not a number", error["message"]
+    assert_equal 400, error["code"]
+
     get "/v1/games/#{id}"
     assert last_response.ok?
     assert_equal [nil, nil, nil, nil, nil, nil, nil, nil, nil],

@@ -12,7 +12,7 @@ module TicTacToe
     def self.create(attributes)
       action = self.new("player" => attributes["player"],
                       "game_id" => attributes["game_id"],
-                      "position" => attributes["position"].to_i,
+                      "position" => attributes["position"],
                       "id" => ::UUID.generate,
                       "created_at" => Time.now.utc.to_i)
       if action.valid?
@@ -28,7 +28,7 @@ module TicTacToe
     end
 
     def position
-      attributes["position"].to_i
+      attributes["position"]
     end
 
     def player
